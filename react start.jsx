@@ -1,7 +1,19 @@
-// STAR MATCH - Starting Template
+// STAR MATCH - V2
+const StarsDisplay=props=>(
+  <>
+ {utils.range(1, props.count).map(starId =>
+          	<div key={starId} className="star" />
+)}
+    </>
+);
+                            
+const PlayNumber = (props)=>(
+	<button className="number" onClick={()=>console.log( props.number)}>
+    {props.number}
+  </button>)
 
 const StarMatch = () => {
-  const [stars,setStars]=useState(utils.random(1,9))
+	const [stars, setStars] = useState(utils.random(1, 9));
   return (
     <div className="game">
       <div className="help">
@@ -9,14 +21,13 @@ const StarMatch = () => {
       </div>
       <div className="body">
         <div className="left">
-         {utils.range(1,stars).map(starId=>
-         <div key={starId} className="star" />
-                                  )}
+         < StarsDisplay  count={stars}/>
+          
         </div>
         <div className="right">
-          {utils.range(1, 9).map(number=>
-           <button key={number} className="number">{number}</button>
-             )}
+        	{utils.range(1, 9).map(number =>
+          < PlayNumber key={number}  number={number}/>
+          )}
         </div>
       </div>
       <div className="timer">Time Remaining: 10</div>
