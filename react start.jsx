@@ -1,4 +1,4 @@
-// STAR MATCH - V3
+// STAR MATCH - V4
 
 const StarsDisplay = props => (
   <>
@@ -10,30 +10,51 @@ const StarsDisplay = props => (
 
 const PlayNumber = props => (
 	<button 
-    className="number" 
-    style={{backgroundColor:colors[props.status]}}
-    onClick={() => console.log('Num', props.number)}>
+  	className="number"
+    style={{ backgroundColor: colors[props.status] }}
+    onClick={() => props.onClick(props.number, props.status)}
+  >
     {props.number}
   </button>
 );
 
 const StarMatch = () => {
 	const [stars, setStars] = useState(utils.random(1, 9));
-  const [availableNums, setAvailableNums]=useState(utils.range(1,9))
-const [candidateNums,setCandidateNums]=useState([])
+  const [availableNums, setAvailableNums] = useState(utils.range(1, 9));
+  const [candidateNums, setCanditateNums] = useState([]);
   
-  const cadidatesAreWrong=utils.sum(candidateNums)>stars
-        
-  const numberStatus=(number)=>{
-  if (!availableNums.includes(number)){
-    return 'used'
-  }  
-    if(candidateNums.includes(number)){
-      return cadidatesAreWrong ? 'wrong':'candidate';
+  const candidatesAreWrong = utils.sum(candidateNums) > stars;
+  
+  const numberStatus = (number) => {
+  	if (!availableNums.includes(number)) {
+    	return 'used';
     }
-    return 'available'
-  } 
+    if (candidateNums.includes(number)) {
+    	return candidatesAreWrong ? 'wrong': 'candidate';
+    }
+    return 'available';
+  };
   
+  const onNumberClick=(number, currentStatus)=>{
+    if (currentStatus =='used'){
+      return;
+        }
+    const newCandidateNums=
+          currentStatus==='available'
+    ? candidateNums.concat(number)
+    : candidateNums.filter(cn=>cn !== number)
+    if (utils.sum(newCandidateNums)!==stars){
+      setCanditateNums(newCandidateNums)
+          }else{
+            const newAvailableNums=availableNums.filter(
+            n=>!newCandidateNums.includs(n));
+            setStars(utils.randomSumIn(newAvailableNums,9))
+            setAvailableNums(mesAvailableNums);
+            setCandidateNums([]) 
+            
+          }
+    
+  }
   return (
     <div className="game">
       <div className="help">
@@ -46,9 +67,11 @@ const [candidateNums,setCandidateNums]=useState([])
         <div className="right">
         	{utils.range(1, 9).map(number =>
           	<PlayNumber 
-              key={number} 
+            	key={number} 
               status={numberStatus(number)}
-              number={number}/>
+              number={number}
+              onClick={onNumberClick}
+            />
           )}
         </div>
       </div>
